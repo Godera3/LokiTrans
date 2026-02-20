@@ -1,7 +1,8 @@
 #include <iostream>
+using namespace std;
 
 int main(int argc, char** argv) {
-  std::cout << "LokiTrans CLI v0.1\n";
-  std::cout << "Args: " << (argc - 1) << "\n";
+  cout << "LokiTrans CLI v0.1\n";
+  cout << "Args: " << (argc - 1) << "\n";
   return 0;
 }
