@@ -1,0 +1,15 @@
+# build folders
+build/
+out/
+cmake-build-*/
+
+# binaries
+*.exe
+*.out
+*.app
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
