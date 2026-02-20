@@ -1,0 +1,91 @@
+🟢 1. Get latest changes from GitHub
+git pull
+What it does:
+Downloads new commits from GitHub and merges them into your current branch.
+
+👉 Use when: starting work or before committing.
+____________________________________________________________________________
+
+🟢 2. Check current status
+git status
+What it does:
+Shows changed files, staged files, and current branch.
+
+👉 Use when: you’re unsure what will be committed.
+____________________________________________________________________________
+
+🟢 3. See current branch
+git branch
+What it does:
+Shows which branch you’re on.
+____________________________________________________________________________
+
+🌿 Branch Workflow (safe teamwork)
+🟢 4. Create a new branch for a task
+git checkout -b feat/server-upload
+What it does:
+Creates and switches to a new branch.
+
+👉 Why: prevents overwriting teammates’ work.
+____________________________________________________________________________
+
+🟢 5. Switch branches
+git checkout main
+What it does:
+Moves you to another branch.
+____________________________________________________________________________
+
+💾 Saving your work (commit)
+🟢 6. Stage changes
+git add .
+What it does:
+Prepares all changed files for commit.
+____________________________________________________________________________
+
+🟢 7. Commit changes
+git commit -m "Add upload endpoint"
+What it does:
+Creates a snapshot of your changes.
+
+👉 Think: “save version with a message”.
+____________________________________________________________________________
+
+☁️ Send your work to GitHub (push)
+🟢 8. Push branch to GitHub
+git push -u origin feat/server-upload
+What it does:
+Uploads your branch to GitHub and links it.
+
+👉 After this → open Pull Request.
+____________________________________________________________________________
+
+🔄 Update your branch with latest main
+🟢 9. Get latest main into your branch
+git checkout main
+git pull
+git checkout feat/server-upload
+git merge main
+What it does:
+Brings new changes from main into your branch.
+
+👉 Prevents conflicts later.
+____________________________________________________________________________
+
+🧹 Clean sync (if repo gets messy)
+🟢 10. Force match GitHub version
+git fetch origin
+git reset --hard origin/main
+What it does:
+Makes your local repo exactly match GitHub.
+
+⚠️ Deletes local changes.
+____________________________________________________________________________
+
+🧠 What Push vs Pull actually mean
+🔼 git push
+➡️ Your computer → GitHub
+You are sending your commits to the remote repo.
+
+🔽 git pull
+⬅️ GitHub → Your computer
+You are downloading teammates’ commits.
