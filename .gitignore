@@ -13,3 +13,6 @@ cmake-build-*/
 
 # macOS
 .DS_Store
+
+# Each person makes their own local device_name.txt (we will .gitignore it so it’s not shared).
+device_name.txt
