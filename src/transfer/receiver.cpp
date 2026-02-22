@@ -1,6 +1,7 @@
 #include "transfer/receiver.h"
 #include "transfer/protocol.h"
 #include "net/socket_utils.h"
+#include "crypto/sha256.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
@@ -26,7 +27,25 @@ static string sanitizeFilename(string name) {
     return name;
 }
 
-int svanipp::run_receiver(uint16_t port, const string& outDir) {
+static filesystem::path uniquePath(filesystem::path p) {
+    namespace fs = filesystem;
+
+    if (!fs::exists(p)) return p;
+
+    fs::path dir = p.parent_path();
+    string stem = p.stem().string();
+    string ext  = p.extension().string();
+
+    for (int i = 1; i < 10000; ++i) {
+        fs::path candidate = dir / (stem + " (" + to_string(i) + ")" + ext);
+        if (!fs::exists(candidate)) return candidate;
+    }
+
+    // fallback if somehow everything exists
+    return dir / (stem + " (copy)" + ext);
+}
+
+int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite) {
     namespace fs = filesystem;
 
     fs::path outPath = fs::path(outDir);
@@ -117,6 +136,9 @@ int svanipp::run_receiver(uint16_t port, const string& outDir) {
     filename = sanitizeFilename(filename);
 
     fs::path saveAs = outPath / filename;
+    if (!overwrite) {
+        saveAs = uniquePath(saveAs);
+    }
 
     ofstream out(saveAs, ios::binary);
     if (!out) {
@@ -130,6 +152,7 @@ int svanipp::run_receiver(uint16_t port, const string& outDir) {
     const size_t BUF = 64 * 1024;
     vector<char> buf(BUF);
 
+    svanipp::crypto::Sha256 hasher;
     uint64_t remaining = fileSize;
     uint64_t received = 0;
 
@@ -140,6 +163,7 @@ int svanipp::run_receiver(uint16_t port, const string& outDir) {
             cerr << "\nConnection lost while receiving\n";
             break;
         }
+        hasher.update(buf.data(), static_cast<size_t>(r));
         out.write(buf.data(), r);
         remaining -= static_cast<uint64_t>(r);
         received += static_cast<uint64_t>(r);
@@ -149,6 +173,28 @@ int svanipp::run_receiver(uint16_t port, const string& outDir) {
             int pct = static_cast<int>((received * 100ULL) / fileSize);
             cout << "\rReceiving " << filename << " ... " << pct << "%";
             cout.flush();
+        }
+    }
+
+    uint8_t gotDigest[32];
+    if (received == fileSize) {
+        if (!recvExact(clientSock, gotDigest, sizeof(gotDigest))) {
+            cerr << "Failed to read SHA-256 digest\n";
+            closesocket(clientSock);
+            closesocket(listenSock);
+            return 2;
+        }
+
+        uint8_t calcDigest[32];
+        hasher.final(calcDigest);
+
+        if (memcmp(gotDigest, calcDigest, 32) != 0) {
+            cerr << "SHA-256 MISMATCH (file integrity failed)\n";
+            closesocket(clientSock);
+            closesocket(listenSock);
+            return 3;
+        } else {
+            cout << "SHA-256 OK\n";
         }
     }
 

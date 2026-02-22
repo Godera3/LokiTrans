@@ -128,6 +128,54 @@ svanipp/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/build
 .PHONY : svanipp/fast
 
+src/crypto/sha256.obj: src/crypto/sha256.cpp.obj
+.PHONY : src/crypto/sha256.obj
+
+# target to build an object file
+src/crypto/sha256.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj
+.PHONY : src/crypto/sha256.cpp.obj
+
+src/crypto/sha256.i: src/crypto/sha256.cpp.i
+.PHONY : src/crypto/sha256.i
+
+# target to preprocess a source file
+src/crypto/sha256.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.i
+.PHONY : src/crypto/sha256.cpp.i
+
+src/crypto/sha256.s: src/crypto/sha256.cpp.s
+.PHONY : src/crypto/sha256.s
+
+# target to generate assembly for a file
+src/crypto/sha256.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.s
+.PHONY : src/crypto/sha256.cpp.s
+
+src/discovery/discovery.obj: src/discovery/discovery.cpp.obj
+.PHONY : src/discovery/discovery.obj
+
+# target to build an object file
+src/discovery/discovery.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj
+.PHONY : src/discovery/discovery.cpp.obj
+
+src/discovery/discovery.i: src/discovery/discovery.cpp.i
+.PHONY : src/discovery/discovery.i
+
+# target to preprocess a source file
+src/discovery/discovery.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.i
+.PHONY : src/discovery/discovery.cpp.i
+
+src/discovery/discovery.s: src/discovery/discovery.cpp.s
+.PHONY : src/discovery/discovery.s
+
+# target to generate assembly for a file
+src/discovery/discovery.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.s
+.PHONY : src/discovery/discovery.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -224,6 +272,30 @@ src/transfer/receiver.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.s
 .PHONY : src/transfer/receiver.cpp.s
 
+src/transfer/sender.obj: src/transfer/sender.cpp.obj
+.PHONY : src/transfer/sender.obj
+
+# target to build an object file
+src/transfer/sender.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj
+.PHONY : src/transfer/sender.cpp.obj
+
+src/transfer/sender.i: src/transfer/sender.cpp.i
+.PHONY : src/transfer/sender.i
+
+# target to preprocess a source file
+src/transfer/sender.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/transfer/sender.cpp.i
+.PHONY : src/transfer/sender.cpp.i
+
+src/transfer/sender.s: src/transfer/sender.cpp.s
+.PHONY : src/transfer/sender.s
+
+# target to generate assembly for a file
+src/transfer/sender.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/transfer/sender.cpp.s
+.PHONY : src/transfer/sender.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -233,6 +305,12 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... svanipp
+	@echo ... src/crypto/sha256.obj
+	@echo ... src/crypto/sha256.i
+	@echo ... src/crypto/sha256.s
+	@echo ... src/discovery/discovery.obj
+	@echo ... src/discovery/discovery.i
+	@echo ... src/discovery/discovery.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s
@@ -245,6 +323,9 @@ help:
 	@echo ... src/transfer/receiver.obj
 	@echo ... src/transfer/receiver.i
 	@echo ... src/transfer/receiver.s
+	@echo ... src/transfer/sender.obj
+	@echo ... src/transfer/sender.i
+	@echo ... src/transfer/sender.s
 .PHONY : help
 
 

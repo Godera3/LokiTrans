@@ -131,12 +131,60 @@ CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.s"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Gabriel\Desktop\Projects\Svanipp\src\transfer\receiver.cpp -o CMakeFiles\svanipp.dir\src\transfer\receiver.cpp.s
 
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj: CMakeFiles/svanipp.dir/flags.make
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj: CMakeFiles/svanipp.dir/includes_CXX.rsp
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj: C:/Users/Gabriel/Desktop/Projects/Svanipp/src/transfer/sender.cpp
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj: CMakeFiles/svanipp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Gabriel\Desktop\Projects\Svanipp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj -MF CMakeFiles\svanipp.dir\src\transfer\sender.cpp.obj.d -o CMakeFiles\svanipp.dir\src\transfer\sender.cpp.obj -c C:\Users\Gabriel\Desktop\Projects\Svanipp\src\transfer\sender.cpp
+
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/svanipp.dir/src/transfer/sender.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Gabriel\Desktop\Projects\Svanipp\src\transfer\sender.cpp > CMakeFiles\svanipp.dir\src\transfer\sender.cpp.i
+
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/svanipp.dir/src/transfer/sender.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Gabriel\Desktop\Projects\Svanipp\src\transfer\sender.cpp -o CMakeFiles\svanipp.dir\src\transfer\sender.cpp.s
+
+CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj: CMakeFiles/svanipp.dir/flags.make
+CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj: CMakeFiles/svanipp.dir/includes_CXX.rsp
+CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj: C:/Users/Gabriel/Desktop/Projects/Svanipp/src/discovery/discovery.cpp
+CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj: CMakeFiles/svanipp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Gabriel\Desktop\Projects\Svanipp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj -MF CMakeFiles\svanipp.dir\src\discovery\discovery.cpp.obj.d -o CMakeFiles\svanipp.dir\src\discovery\discovery.cpp.obj -c C:\Users\Gabriel\Desktop\Projects\Svanipp\src\discovery\discovery.cpp
+
+CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Gabriel\Desktop\Projects\Svanipp\src\discovery\discovery.cpp > CMakeFiles\svanipp.dir\src\discovery\discovery.cpp.i
+
+CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Gabriel\Desktop\Projects\Svanipp\src\discovery\discovery.cpp -o CMakeFiles\svanipp.dir\src\discovery\discovery.cpp.s
+
+CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj: CMakeFiles/svanipp.dir/flags.make
+CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj: CMakeFiles/svanipp.dir/includes_CXX.rsp
+CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj: C:/Users/Gabriel/Desktop/Projects/Svanipp/src/crypto/sha256.cpp
+CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj: CMakeFiles/svanipp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Gabriel\Desktop\Projects\Svanipp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj -MF CMakeFiles\svanipp.dir\src\crypto\sha256.cpp.obj.d -o CMakeFiles\svanipp.dir\src\crypto\sha256.cpp.obj -c C:\Users\Gabriel\Desktop\Projects\Svanipp\src\crypto\sha256.cpp
+
+CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Gabriel\Desktop\Projects\Svanipp\src\crypto\sha256.cpp > CMakeFiles\svanipp.dir\src\crypto\sha256.cpp.i
+
+CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Gabriel\Desktop\Projects\Svanipp\src\crypto\sha256.cpp -o CMakeFiles\svanipp.dir\src\crypto\sha256.cpp.s
+
 # Object files for target svanipp
 svanipp_OBJECTS = \
 "CMakeFiles/svanipp.dir/src/main.cpp.obj" \
 "CMakeFiles/svanipp.dir/src/net/winsock_init.cpp.obj" \
 "CMakeFiles/svanipp.dir/src/net/socket_utils.cpp.obj" \
-"CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.obj"
+"CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.obj" \
+"CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj" \
+"CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj" \
+"CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj"
 
 # External object files for target svanipp
 svanipp_EXTERNAL_OBJECTS =
@@ -145,11 +193,14 @@ svanipp.exe: CMakeFiles/svanipp.dir/src/main.cpp.obj
 svanipp.exe: CMakeFiles/svanipp.dir/src/net/winsock_init.cpp.obj
 svanipp.exe: CMakeFiles/svanipp.dir/src/net/socket_utils.cpp.obj
 svanipp.exe: CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.obj
+svanipp.exe: CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj
+svanipp.exe: CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj
+svanipp.exe: CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj
 svanipp.exe: CMakeFiles/svanipp.dir/build.make
 svanipp.exe: CMakeFiles/svanipp.dir/linkLibs.rsp
 svanipp.exe: CMakeFiles/svanipp.dir/objects1.rsp
 svanipp.exe: CMakeFiles/svanipp.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Gabriel\Desktop\Projects\Svanipp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable svanipp.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Gabriel\Desktop\Projects\Svanipp\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable svanipp.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\svanipp.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

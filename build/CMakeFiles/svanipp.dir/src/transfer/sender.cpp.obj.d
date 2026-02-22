@@ -1,6 +1,6 @@
-CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.obj: \
- C:\Users\Gabriel\Desktop\Projects\Svanipp\src\transfer\receiver.cpp \
- C:/Users/Gabriel/Desktop/Projects/Svanipp/src/transfer/receiver.h \
+CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj: \
+ C:\Users\Gabriel\Desktop\Projects\Svanipp\src\transfer\sender.cpp \
+ C:/Users/Gabriel/Desktop/Projects/Svanipp/src/transfer/sender.h \
  C:/msys64/ucrt64/include/c++/15.2.0/cstdint \
  C:/msys64/ucrt64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
  C:/msys64/ucrt64/include/c++/15.2.0/x86_64-w64-mingw32/bits/os_defines.h \

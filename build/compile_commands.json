@@ -22,5 +22,23 @@
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\transfer\\receiver.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\transfer\\receiver.cpp",
   "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/transfer/receiver.cpp",
   "output": "CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.obj"
+},
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\transfer\\sender.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\transfer\\sender.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/transfer/sender.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj"
+},
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\discovery\\discovery.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\discovery\\discovery.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/discovery/discovery.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj"
+},
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\crypto\\sha256.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\crypto\\sha256.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/crypto/sha256.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj"
 }
 ]

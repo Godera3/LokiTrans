@@ -9,6 +9,9 @@ add_executable(svanipp
     src/net/winsock_init.cpp
     src/net/socket_utils.cpp
     src/transfer/receiver.cpp
+    src/transfer/sender.cpp
+    src/discovery/discovery.cpp
+    src/crypto/sha256.cpp
 )
 
 target_include_directories(svanipp PRIVATE src)

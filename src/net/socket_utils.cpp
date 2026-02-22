@@ -1,5 +1,7 @@
 #include "net/socket_utils.h"
 
+using namespace std;
+
 #ifdef _WIN32
 #include <winsock2.h>
 #else
@@ -37,24 +39,24 @@ uint64_t ntoh_u64(uint64_t v) {
 
 uint64_t hton_u64(uint64_t v) { return ntoh_u64(v); }
 
-bool recvExact(socket_t s, void* buf, std::size_t n) {
+bool recvExact(socket_t s, void* buf, size_t n) {
     auto* p = static_cast<char*>(buf);
-    std::size_t got = 0;
+    size_t got = 0;
     while (got < n) {
         int r = ::recv(s, p + got, static_cast<int>(n - got), 0);
         if (r <= 0) return false;
-        got += static_cast<std::size_t>(r);
+        got += static_cast<size_t>(r);
     }
     return true;
 }
 
-bool sendAll(socket_t s, const void* buf, std::size_t n) {
+bool sendAll(socket_t s, const void* buf, size_t n) {
     const auto* p = static_cast<const char*>(buf);
-    std::size_t sent = 0;
+    size_t sent = 0;
     while (sent < n) {
         int r = ::send(s, p + sent, static_cast<int>(n - sent), 0);
         if (r <= 0) return false;
-        sent += static_cast<std::size_t>(r);
+        sent += static_cast<size_t>(r);
     }
     return true;
 }
