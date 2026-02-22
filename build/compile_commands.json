@@ -1,0 +1,26 @@
+[
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\main.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\main.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/main.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\net\\winsock_init.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\net\\winsock_init.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/net/winsock_init.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/net/winsock_init.cpp.obj"
+},
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\net\\socket_utils.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\net\\socket_utils.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/net/socket_utils.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/net/socket_utils.cpp.obj"
+},
+{
+  "directory": "C:/Users/Gabriel/Desktop/Projects/Svanipp/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/svanipp.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\svanipp.dir\\src\\transfer\\receiver.cpp.obj -c C:\\Users\\Gabriel\\Desktop\\Projects\\Svanipp\\src\\transfer\\receiver.cpp",
+  "file": "C:/Users/Gabriel/Desktop/Projects/Svanipp/src/transfer/receiver.cpp",
+  "output": "CMakeFiles/svanipp.dir/src/transfer/receiver.cpp.obj"
+}
+]
