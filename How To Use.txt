@@ -1,0 +1,145 @@
+SVANIPP — HOW TO USE
+
+This guide explains everything you need, from setup to sending your first file.
+No technical knowledge required.
+
+────────────────────────
+PART 1 — WHAT YOU NEED FIRST
+────────────────────────
+
+Before you can use Svanipp, your computer must have:
+
+✔ A C++ compiler
+✔ CMake
+✔ The Svanipp source code
+✔ Two devices on the same network (Wi-Fi or LAN)
+
+If you are using Windows, the easiest setup is:
+
+Install MSYS2 (includes GCC compiler)
+
+Install CMake
+
+Install Visual Studio Code (optional but helpful)
+
+If you already built svanipp.exe, you are ready to use it.
+
+────────────────────────
+PART 2 — BUILD THE PROGRAM
+────────────────────────
+
+If you only have the source code, build it first.
+
+Open a terminal in the Svanipp folder and run:
+
+cmake -S . -B build
+cmake --build build
+
+After this, you will see:
+
+build/svanipp.exe
+
+That is the program you will run.
+
+────────────────────────
+PART 3 — BASIC IDEA
+────────────────────────
+
+Svanipp sends files between devices on the same network.
+
+Think of it like handing a book to a friend sitting next to you.
+
+One computer RECEIVES.
+One computer SENDS.
+
+────────────────────────
+PART 4 — START THE RECEIVER
+────────────────────────
+
+On the computer that will receive the file:
+
+Open PowerShell or Terminal and run:
+
+svanipp receive --port 39000 --out Downloads
+
+What this means:
+• The computer waits for incoming files
+• Files will be saved in the "Downloads" folder
+
+Leave this window open.
+
+────────────────────────
+PART 5 — FIND OTHER DEVICES
+────────────────────────
+
+On the sending computer, you can see available devices:
+
+svanipp discover
+
+Example output:
+
+192.168.1.10  MY-PC  39000
+
+This means the device MY-PC is ready to receive files.
+
+────────────────────────
+PART 6 — SEND A FILE
+────────────────────────
+
+You can send using the IP address:
+
+svanipp send --ip 192.168.1.10 myfile.txt
+
+Or using the device name:
+
+svanipp send --name MY-PC myfile.txt
+
+What happens:
+• The file is transferred
+• You see progress on both computers
+• The receiver saves the file
+
+────────────────────────
+PART 7 — WHAT YOU WILL SEE
+────────────────────────
+
+Sender:
+Sending myfile.txt ... 100%
+Sent: myfile.txt
+
+Receiver:
+Receiving myfile.txt ... 100%
+SHA-256 OK
+Saved: Downloads\myfile.txt
+
+“SHA-256 OK” means the file arrived safely and is identical.
+
+────────────────────────
+PART 8 — SENDING THE SAME FILE AGAIN
+────────────────────────
+
+By default, Svanipp does not overwrite files.
+
+You will get:
+myfile.txt
+myfile (1).txt
+myfile (2).txt
+
+If you want to replace files instead, start receiver with:
+
+svanipp receive --port 39000 --out Downloads --overwrite
+
+────────────────────────
+PART 9 — TROUBLESHOOTING
+────────────────────────
+
+Nothing appears in discover?
+✔ Make sure both devices are on the same network
+✔ Make sure the receiver is running
+
+Connection failed?
+✔ Check the IP address
+✔ Ensure firewall allows the program
+
+File not received?
+✔ Make sure the receiver window is still open
