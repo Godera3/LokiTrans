@@ -132,6 +132,20 @@ static string detect_local_ip() {
     return string(ip);
 }
 
+static string detect_hostname() {
+#ifdef _WIN32
+    if (const char* cn = getenv("COMPUTERNAME")) {
+        if (cn[0] != '\0') return string(cn);
+    }
+#endif
+
+    char buf[256]{};
+    if (::gethostname(buf, static_cast<int>(sizeof(buf))) == 0 && buf[0] != '\0') {
+        return string(buf);
+    }
+    return "unknown";
+}
+
 static bool bind_test(uint16_t port, string& reason) {
 #ifdef _WIN32
     SOCKET s = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -569,11 +583,13 @@ int main(int argc, char** argv) {
         bool colors = color_supported(noColor);
         bool tuiAuto = (!noTui && tty);
         string localIp = detect_local_ip();
+        string hostname = detect_hostname();
         string bindReason;
         bool bindOk = bind_test(transferPort, bindReason);
 
         cout << "Svanipp v1.0.0\n\n";
         cout << "Local IP:        " << localIp << "\n";
+        cout << "Hostname:        " << hostname << "\n";
         cout << "Transfer port:   " << transferPort << "\n";
         cout << "Discovery port:  " << svanipp::discovery::kDiscoveryPort << "\n\n";
 

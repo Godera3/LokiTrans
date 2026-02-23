@@ -160,6 +160,7 @@ svanipp check
 This command quickly verifies:
 ✔ Version
 ✔ Local IP address
+✔ Hostname
 ✔ Transfer port
 ✔ Discovery port
 ✔ Terminal support (TTY, colors, TUI auto)

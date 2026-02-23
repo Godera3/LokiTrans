@@ -129,7 +129,7 @@ Optional:
 - `--no-color` — Force color support off in the report
 
 The check reports:
-- Local IP and configured transfer/discovery ports
+- Local IP, hostname, and configured transfer/discovery ports
 - TTY, color support, and TUI auto status
 - Bind test on the transfer port (socket opens and closes immediately)
 - Final verdict: `READY` or `ISSUES FOUND`
