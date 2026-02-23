@@ -7,6 +7,7 @@ A lightweight, command-line file transfer tool for local networks. Send files an
 ## Features
 
 - **Interactive Device Discovery** — Automatically discovers receivers on your network; pick from a numbered list
+- **Environment Sanity Check** — `svanipp check` validates terminal and network readiness before transfers
 - **Folder Recursion** — Send entire folder hierarchies while preserving directory structure
 - **Multi-File Transfer** — Send multiple files and folders in a single command
 - **Integrity Verification** — SHA-256 hash verification per file ensures no corruption
@@ -113,6 +114,29 @@ Output example:
 192.168.1.10  LAPTOP-XYZ  39000
 192.168.1.15  DESKTOP-ABC  39000
 ```
+
+### Run a Quick Readiness Check
+
+Use this before demos or transfers to verify your environment:
+
+```powershell
+build\svanipp.exe check
+```
+
+Optional:
+- `--port <number>` — Test readiness for a custom transfer port
+- `--no-tui` — Show what terminal capability looks like when TUI is disabled
+- `--no-color` — Force color support off in the report
+
+The check reports:
+- Local IP and configured transfer/discovery ports
+- TTY, color support, and TUI auto status
+- Bind test on the transfer port (socket opens and closes immediately)
+- Final verdict: `READY` or `ISSUES FOUND`
+
+Exit code:
+- `0` = ready
+- non-zero = issues found
 
 ## How It Works
 
@@ -229,9 +253,10 @@ Improvements and bug reports are welcome. Test on your network and report findin
 
 **Quick Start:**
 
-1. Open two terminals
-2. Terminal 1: `build\svanipp.exe receive --port 39000 --out Downloads`
-3. Terminal 2: `build\svanipp.exe send "C:\some\folder"`
-4. Pick the device; files transfer automatically
+1. Run a quick check: `build\svanipp.exe check`
+2. Open two terminals
+3. Terminal 1: `build\svanipp.exe receive --port 39000 --out Downloads`
+4. Terminal 2: `build\svanipp.exe send "C:\some\folder"`
+5. Pick the device; files transfer automatically
 
 That's it!

@@ -148,3 +148,33 @@ Connection failed?
 
 File not received?
 ✔ Make sure the receiver window is still open
+
+────────────────────────
+PART 10 — QUICK HEALTH CHECK (RECOMMENDED)
+────────────────────────
+
+Before demos or transfers, run this once:
+
+svanipp check
+
+This command quickly verifies:
+✔ Version
+✔ Local IP address
+✔ Transfer port
+✔ Discovery port
+✔ Terminal support (TTY, colors, TUI auto)
+✔ Bind test on transfer port
+
+You will get a final status:
+• READY
+or
+• ISSUES FOUND
+
+If bind test fails with "port in use", close the process using that port
+or choose a different transfer port and test it directly:
+
+svanipp check --port 39001
+
+Exit code:
+• 0 = ready
+• non-zero = issues found

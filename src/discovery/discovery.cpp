@@ -12,7 +12,6 @@
 using namespace std;
 
 namespace {
-static constexpr unsigned short DISCOVERY_PORT = 38999;
 static constexpr const char* DISCOVER_MSG = "SVANIPP_DISCOVER_V1";
 static constexpr const char* HERE_PREFIX  = "SVANIPP_HERE_V1;";
 }
@@ -25,7 +24,7 @@ void svanipp::discovery::run_responder(uint16_t tcpPort, const string& deviceNam
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = htons(DISCOVERY_PORT);
+    addr.sin_port = htons(svanipp::discovery::kDiscoveryPort);
 
     if (::bind(s, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == SOCKET_ERROR) {
         closesocket(s);
@@ -70,7 +69,7 @@ vector<svanipp::discovery::FoundDevice> svanipp::discovery::run_scan(int timeout
 
     sockaddr_in bcast{};
     bcast.sin_family = AF_INET;
-    bcast.sin_port = htons(DISCOVERY_PORT);
+    bcast.sin_port = htons(svanipp::discovery::kDiscoveryPort);
     bcast.sin_addr.s_addr = INADDR_BROADCAST; // 255.255.255.255
 
     ::sendto(s, DISCOVER_MSG, static_cast<int>(strlen(DISCOVER_MSG)), 0,

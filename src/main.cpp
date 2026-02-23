@@ -17,6 +17,19 @@
 #include <chrono>
 #include <sstream>
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h>
+#include <io.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#endif
+
 using namespace std;
 
 static void usage() {
@@ -36,11 +49,132 @@ static void usage() {
     "    --idle-timeout <sec>: transfer idle timeout (default: 15)\n"
     "    --retries <n>: retry count for transient failures (default: 3)\n"
         "    without --ip/--name: interactive device selection\n"
-        "  svanipp discover [--no-color] [--no-tui]\n";
+    "  svanipp discover [--no-color] [--no-tui]\n"
+    "  svanipp check [--port <p>] [--no-color] [--no-tui]\n";
 }
 
 static bool argEq(const char* a, const char* b) {
     return string(a) == string(b);
+}
+
+static bool stdout_is_tty() {
+#ifdef _WIN32
+    return _isatty(_fileno(stdout)) != 0;
+#else
+    return isatty(fileno(stdout)) != 0;
+#endif
+}
+
+static bool color_supported(bool noColor) {
+    if (noColor) return false;
+    if (!stdout_is_tty()) return false;
+#ifdef _WIN32
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) return false;
+    DWORD mode = 0;
+    if (!GetConsoleMode(hOut, &mode)) return false;
+    return true;
+#else
+    return true;
+#endif
+}
+
+static string detect_local_ip() {
+#ifdef _WIN32
+    SOCKET s = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (s == INVALID_SOCKET) return "unknown";
+#else
+    int s = ::socket(AF_INET, SOCK_DGRAM, 0);
+    if (s < 0) return "unknown";
+#endif
+
+    sockaddr_in remote{};
+    remote.sin_family = AF_INET;
+    remote.sin_port = htons(53);
+    if (::inet_pton(AF_INET, "8.8.8.8", &remote.sin_addr) != 1) {
+#ifdef _WIN32
+        closesocket(s);
+#else
+        close(s);
+#endif
+        return "unknown";
+    }
+
+    if (::connect(s, reinterpret_cast<sockaddr*>(&remote), sizeof(remote)) != 0) {
+#ifdef _WIN32
+        closesocket(s);
+#else
+        close(s);
+#endif
+        return "unknown";
+    }
+
+    sockaddr_in local{};
+    int len = static_cast<int>(sizeof(local));
+    if (::getsockname(s, reinterpret_cast<sockaddr*>(&local), &len) != 0) {
+#ifdef _WIN32
+        closesocket(s);
+#else
+        close(s);
+#endif
+        return "unknown";
+    }
+
+    char ip[INET_ADDRSTRLEN]{};
+    const char* p = ::inet_ntop(AF_INET, &local.sin_addr, ip, sizeof(ip));
+#ifdef _WIN32
+    closesocket(s);
+#else
+    close(s);
+#endif
+
+    if (!p) return "unknown";
+    return string(ip);
+}
+
+static bool bind_test(uint16_t port, string& reason) {
+#ifdef _WIN32
+    SOCKET s = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (s == INVALID_SOCKET) {
+        reason = "socket create failed";
+        return false;
+    }
+#else
+    int s = ::socket(AF_INET, SOCK_STREAM, 0);
+    if (s < 0) {
+        reason = "socket create failed";
+        return false;
+    }
+#endif
+
+    sockaddr_in addr{};
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(port);
+
+    bool ok = ::bind(s, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == 0;
+    if (!ok) {
+#ifdef _WIN32
+        int err = WSAGetLastError();
+        if (err == WSAEADDRINUSE) {
+            reason = "port in use";
+        } else {
+            reason = "bind error " + to_string(err);
+        }
+        closesocket(s);
+#else
+        reason = "bind failed";
+        close(s);
+#endif
+        return false;
+    }
+
+#ifdef _WIN32
+    closesocket(s);
+#else
+    close(s);
+#endif
+    return true;
 }
 
 int main(int argc, char** argv) {
@@ -410,6 +544,54 @@ int main(int argc, char** argv) {
             cout << d.ip << "  " << d.name << "  " << d.port << "\n";
         }
         return 0;
+    }
+
+    // ===== CHECK =====
+    if (cmd == "check") {
+        uint16_t transferPort = 39000;
+        bool noColor = false;
+        bool noTui = false;
+
+        for (int i = 2; i < argc; ++i) {
+            if (argEq(argv[i], "--port") && i + 1 < argc) {
+                transferPort = static_cast<uint16_t>(stoi(argv[++i]));
+            } else if (argEq(argv[i], "--no-color")) {
+                noColor = true;
+            } else if (argEq(argv[i], "--no-tui")) {
+                noTui = true;
+            } else {
+                usage();
+                return 1;
+            }
+        }
+
+        bool tty = stdout_is_tty();
+        bool colors = color_supported(noColor);
+        bool tuiAuto = (!noTui && tty);
+        string localIp = detect_local_ip();
+        string bindReason;
+        bool bindOk = bind_test(transferPort, bindReason);
+
+        cout << "Svanipp v1.0.0\n\n";
+        cout << "Local IP:        " << localIp << "\n";
+        cout << "Transfer port:   " << transferPort << "\n";
+        cout << "Discovery port:  " << svanipp::discovery::kDiscoveryPort << "\n\n";
+
+        cout << "Terminal:\n";
+        cout << "  TTY:           " << (tty ? "yes" : "no") << "\n";
+        cout << "  Colors:        " << (colors ? "yes" : "no") << "\n";
+        cout << "  TUI auto:      " << (tuiAuto ? "enabled" : "disabled") << "\n\n";
+
+        cout << "Network:\n";
+        if (bindOk) {
+            cout << "  Bind test:     OK\n\n";
+            cout << "Status: READY\n";
+            return 0;
+        }
+
+        cout << "  Bind test:     FAIL (" << bindReason << ")\n\n";
+        cout << "Status: ISSUES FOUND\n";
+        return 2;
     }
 
     usage();

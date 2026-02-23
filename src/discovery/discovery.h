@@ -7,6 +7,8 @@ using namespace std;
 
 namespace svanipp::discovery {
 
+static constexpr uint16_t kDiscoveryPort = 38999;
+
 struct FoundDevice {
     string ip;
     string name;
