@@ -104,30 +104,35 @@ PART 7 — WHAT YOU WILL SEE
 ────────────────────────
 
 Sender:
-Sending myfile.txt ... 100%
-Sent: myfile.txt
+Sending myfile.txt
+  100%
+Sent: myfile.txt (0.25 MB)
 
 Receiver:
 Receiving myfile.txt ... 100%
-SHA-256 OK
-Saved: Downloads\myfile.txt
+Saved: Downloads\myfile.txt (0.25 MB)
 
-“SHA-256 OK” means the file arrived safely and is identical.
+Files arrive safely: each file is verified with SHA-256. Only errors are reported.
 
 ────────────────────────
 PART 8 — SENDING THE SAME FILE AGAIN
 ────────────────────────
 
-By default, Svanipp does not overwrite files.
+If you send the same file a second time:
 
-You will get:
-myfile.txt
-myfile (1).txt
-myfile (2).txt
+By default, Svanipp will ASK if you want to overwrite:
 
-If you want to replace files instead, start receiver with:
+  File exists: myfile.txt. Overwrite? (y/n): 
+
+Type "y" or "n":
+• y = replace the old file
+• n = keep the old file; new one will be named myfile (1).txt
+
+If you want automatic overwrite without prompting, start receiver with:
 
 svanipp receive --port 39000 --out Downloads --overwrite
+
+This skips the prompt and always overwrites without asking.
 
 ────────────────────────
 PART 9 — TROUBLESHOOTING

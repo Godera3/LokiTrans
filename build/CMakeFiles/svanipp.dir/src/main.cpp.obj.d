@@ -109,6 +109,18 @@ CMakeFiles/svanipp.dir/src/main.cpp.obj: \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/stl_vector.h \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/vector.tcc \
+ C:\Users\Gabriel\Desktop\Projects\Svanipp\src\console/console_ui.h \
+ C:/msys64/ucrt64/include/c++/15.2.0/chrono \
+ C:/msys64/ucrt64/include/c++/15.2.0/bits/chrono.h \
+ C:/msys64/ucrt64/include/c++/15.2.0/ratio \
+ C:/msys64/ucrt64/include/c++/15.2.0/limits \
+ C:/msys64/ucrt64/include/c++/15.2.0/ctime \
+ C:/msys64/ucrt64/include/time.h C:/msys64/ucrt64/include/sys/timeb.h \
+ C:/msys64/ucrt64/include/sec_api/sys/timeb_s.h \
+ C:/msys64/ucrt64/include/_timeval.h \
+ C:/msys64/ucrt64/include/pthread_time.h \
+ C:/msys64/ucrt64/include/pthread_compat.h \
+ C:/msys64/ucrt64/include/c++/15.2.0/bits/parse_numbers.h \
  C:/msys64/ucrt64/include/c++/15.2.0/thread \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/std_thread.h \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/unique_ptr.h \
@@ -119,19 +131,9 @@ CMakeFiles/svanipp.dir/src/main.cpp.obj: \
  C:/msys64/ucrt64/include/corecrt_startup.h \
  C:/msys64/ucrt64/include/signal.h \
  C:/msys64/ucrt64/include/pthread_signal.h \
- C:/msys64/ucrt64/include/time.h C:/msys64/ucrt64/include/sys/timeb.h \
- C:/msys64/ucrt64/include/sec_api/sys/timeb_s.h \
- C:/msys64/ucrt64/include/_timeval.h \
- C:/msys64/ucrt64/include/pthread_time.h \
- C:/msys64/ucrt64/include/pthread_compat.h \
  C:/msys64/ucrt64/include/sched.h \
  C:/msys64/ucrt64/include/pthread_unistd.h \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/this_thread_sleep.h \
- C:/msys64/ucrt64/include/c++/15.2.0/bits/chrono.h \
- C:/msys64/ucrt64/include/c++/15.2.0/ratio \
- C:/msys64/ucrt64/include/c++/15.2.0/limits \
- C:/msys64/ucrt64/include/c++/15.2.0/ctime \
- C:/msys64/ucrt64/include/c++/15.2.0/bits/parse_numbers.h \
  C:/msys64/ucrt64/include/c++/15.2.0/iostream \
  C:/msys64/ucrt64/include/c++/15.2.0/ostream \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/ostream.h \

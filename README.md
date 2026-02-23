@@ -58,7 +58,7 @@ build\svanipp.exe receive --port 39000 --out Downloads
 **Options:**
 - `--port <number>` — Listen on this port (default: 39000)
 - `--out <directory>` — Save files to this folder (default: Downloads)
-- `--overwrite` — Overwrite existing files instead of renaming them
+- `--overwrite` — Skip confirmation and automatically overwrite existing files
 
 The receiver will:
 - Listen for incoming connections
@@ -66,6 +66,7 @@ The receiver will:
 - Verify SHA-256 hash for each file (silent if OK, error if mismatch)
 - Accept the next connection automatically
 - Print file size in MB when complete
+- **Prompt before overwrite** — If a file exists, ask the user (y/n); without `--overwrite` flag
 
 ### Send Files or Folders
 
@@ -179,7 +180,6 @@ Sent: Documents\report.pdf (2.10 MB)
 
 ## Known Limitations
 
-- **Unicode Filenames** — Files with non-ASCII characters (e.g., Chinese, emojis, accents) may fail on Windows due to UTF-16 path encoding. ASCII and basic Latin characters work reliably. Full Unicode support planned for v1.1.
 - **Port Binding** — Default port 39000 must be available; change with `--port` if it's in use. Discovery uses a separate port (38999 default).
 - **Single Connection Per File** — Files are sent serially, one per TCP connection. Parallel transfers in future versions.
 
@@ -207,7 +207,6 @@ Tested on a local Gigabit network:
 ## Roadmap
 
 **v1.1 (planned)**
-- Full Unicode filename support (UTF-16 on Windows)
 - Resume interrupted transfers
 - Bandwidth throttling
 

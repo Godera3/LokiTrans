@@ -128,6 +128,30 @@ svanipp/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/build
 .PHONY : svanipp/fast
 
+src/console/console_ui.obj: src/console/console_ui.cpp.obj
+.PHONY : src/console/console_ui.obj
+
+# target to build an object file
+src/console/console_ui.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/console/console_ui.cpp.obj
+.PHONY : src/console/console_ui.cpp.obj
+
+src/console/console_ui.i: src/console/console_ui.cpp.i
+.PHONY : src/console/console_ui.i
+
+# target to preprocess a source file
+src/console/console_ui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/console/console_ui.cpp.i
+.PHONY : src/console/console_ui.cpp.i
+
+src/console/console_ui.s: src/console/console_ui.cpp.s
+.PHONY : src/console/console_ui.s
+
+# target to generate assembly for a file
+src/console/console_ui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\svanipp.dir\build.make CMakeFiles/svanipp.dir/src/console/console_ui.cpp.s
+.PHONY : src/console/console_ui.cpp.s
+
 src/crypto/sha256.obj: src/crypto/sha256.cpp.obj
 .PHONY : src/crypto/sha256.obj
 
@@ -305,6 +329,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... svanipp
+	@echo ... src/console/console_ui.obj
+	@echo ... src/console/console_ui.i
+	@echo ... src/console/console_ui.s
 	@echo ... src/crypto/sha256.obj
 	@echo ... src/crypto/sha256.i
 	@echo ... src/crypto/sha256.s

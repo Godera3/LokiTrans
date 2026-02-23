@@ -508,6 +508,7 @@ CMakeFiles/svanipp.dir/src/main.cpp.obj: C:/Users/Gabriel/Desktop/Projects/Svani
   C:/msys64/ucrt64/include/c++/15.2.0/bits/version.h \
   C:/msys64/ucrt64/include/c++/15.2.0/cctype \
   C:/msys64/ucrt64/include/c++/15.2.0/cerrno \
+  C:/msys64/ucrt64/include/c++/15.2.0/chrono \
   C:/msys64/ucrt64/include/c++/15.2.0/clocale \
   C:/msys64/ucrt64/include/c++/15.2.0/codecvt \
   C:/msys64/ucrt64/include/c++/15.2.0/concepts \
@@ -1623,6 +1624,7 @@ CMakeFiles/svanipp.dir/src/transfer/sender.cpp.obj: C:/Users/Gabriel/Desktop/Pro
   C:/msys64/ucrt64/include/c++/15.2.0/bits/version.h \
   C:/msys64/ucrt64/include/c++/15.2.0/cctype \
   C:/msys64/ucrt64/include/c++/15.2.0/cerrno \
+  C:/msys64/ucrt64/include/c++/15.2.0/chrono \
   C:/msys64/ucrt64/include/c++/15.2.0/clocale \
   C:/msys64/ucrt64/include/c++/15.2.0/codecvt \
   C:/msys64/ucrt64/include/c++/15.2.0/concepts \

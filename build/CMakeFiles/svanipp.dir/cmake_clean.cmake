@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/svanipp.dir/src/console/console_ui.cpp.obj"
+  "CMakeFiles/svanipp.dir/src/console/console_ui.cpp.obj.d"
   "CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj"
   "CMakeFiles/svanipp.dir/src/crypto/sha256.cpp.obj.d"
   "CMakeFiles/svanipp.dir/src/discovery/discovery.cpp.obj"

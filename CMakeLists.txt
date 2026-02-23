@@ -8,6 +8,7 @@ add_executable(svanipp
     src/main.cpp
     src/net/winsock_init.cpp
     src/net/socket_utils.cpp
+    src/console/console_ui.cpp
     src/transfer/receiver.cpp
     src/transfer/sender.cpp
     src/discovery/discovery.cpp
