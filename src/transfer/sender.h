@@ -8,5 +8,9 @@ namespace svanipp {
                    const std::string& filePath,
                    const std::string& relPath,
                    std::uint64_t& bytesSent,
-                   std::string& error);
+                   std::string& error,
+                   int connectTimeoutSec,
+                   int ioTimeoutSec,
+                   int idleTimeoutSec,
+                   int retries);
 }

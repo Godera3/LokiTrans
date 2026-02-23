@@ -3,5 +3,10 @@
 #include <string>
 
 namespace svanipp {
-    int run_receiver(std::uint16_t port, const std::string& outDir, bool overwrite, bool summary);
+    int run_receiver(std::uint16_t port,
+                     const std::string& outDir,
+                     bool overwrite,
+                     bool summary,
+                     int ioTimeoutSec,
+                     int idleTimeoutSec);
 }

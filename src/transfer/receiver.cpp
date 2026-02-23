@@ -18,6 +18,12 @@
 #include <cstring>
 #include <cctype>
 #include <sstream>
+#include <cerrno>
+
+#ifndef _WIN32
+#include <sys/select.h>
+#include <unistd.h>
+#endif
 
 using namespace std;
 
@@ -80,11 +86,75 @@ static bool is_subpath(const filesystem::path& base, const filesystem::path& tar
     return targetStr.rfind(baseStr, 0) == 0;
 }
 
+static int last_socket_error() {
+#ifdef _WIN32
+    return WSAGetLastError();
+#else
+    return errno;
+#endif
+}
+
+static bool is_timeout_error(int err) {
+#ifdef _WIN32
+    return err == WSAETIMEDOUT || err == WSAEWOULDBLOCK;
+#else
+    return err == ETIMEDOUT || err == EAGAIN || err == EWOULDBLOCK;
+#endif
+}
+
+static bool recv_exact_with_timeout(socket_t sock, void* buf, size_t n, int timeoutMs, string& reason) {
+    auto* p = static_cast<char*>(buf);
+    size_t got = 0;
+    auto start = chrono::steady_clock::now();
+    while (got < n) {
+        int remainingMs = timeoutMs - static_cast<int>(chrono::duration_cast<chrono::milliseconds>(
+            chrono::steady_clock::now() - start).count());
+        if (remainingMs <= 0) {
+            reason = "timeout";
+            return false;
+        }
+        fd_set rfds;
+        FD_ZERO(&rfds);
+        FD_SET(sock, &rfds);
+        timeval tv{};
+        tv.tv_sec = remainingMs / 1000;
+        tv.tv_usec = (remainingMs % 1000) * 1000;
+        int sel = select(static_cast<int>(sock + 1), &rfds, nullptr, nullptr, &tv);
+        if (sel == 0) {
+            reason = "timeout";
+            return false;
+        }
+        if (sel < 0) {
+            reason = "recv failed";
+            return false;
+        }
+        int r = ::recv(sock, p + got, static_cast<int>(n - got), 0);
+        if (r == 0) {
+            reason = "connection closed";
+            return false;
+        }
+        if (r < 0) {
+            int err = last_socket_error();
+            reason = is_timeout_error(err) ? "timeout" : "recv failed";
+            return false;
+        }
+        got += static_cast<size_t>(r);
+    }
+    return true;
+}
 
 
 
-int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite, bool summary) {
+
+int svanipp::run_receiver(uint16_t port,
+                          const string& outDir,
+                          bool overwrite,
+                          bool summary,
+                          int ioTimeoutSec,
+                          int idleTimeoutSec) {
     namespace fs = filesystem;
+    const int ioTimeoutMs = (ioTimeoutSec <= 0) ? 0 : ioTimeoutSec * 1000;
+    const int idleTimeoutMs = (idleTimeoutSec <= 0) ? 0 : idleTimeoutSec * 1000;
 
     fs::path outPath = fs::path(outDir);
     error_code ec;
@@ -136,8 +206,9 @@ int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite, b
         bool attempted = false;
         // Read fixed header
         svanipp::proto::HeaderFixed hf{};
-        if (!recvExact(clientSock, &hf, sizeof(hf))) {
-            ui.log(svanipp::console::Style::Fail, "Failed to read header");
+        string recvReason;
+        if (!recv_exact_with_timeout(clientSock, &hf, sizeof(hf), ioTimeoutMs, recvReason)) {
+            ui.log(svanipp::console::Style::Fail, "Header " + recvReason);
             closesocket(clientSock);
             continue;
         }
@@ -166,8 +237,8 @@ int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite, b
 
         // Read filename
         vector<char> nameBuf(nameLen);
-        if (!recvExact(clientSock, nameBuf.data(), nameBuf.size())) {
-            ui.log(svanipp::console::Style::Fail, "Failed to read filename");
+        if (!recv_exact_with_timeout(clientSock, nameBuf.data(), nameBuf.size(), ioTimeoutMs, recvReason)) {
+            ui.log(svanipp::console::Style::Fail, "Filename " + recvReason);
             closesocket(clientSock);
             continue;
         }
@@ -252,6 +323,9 @@ int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite, b
             continue;
         }
 
+        bool failed = false;
+        string failReason;
+
         // Stream file bytes
         const size_t BUF = 64 * 1024;
         vector<char> buf(BUF);
@@ -265,8 +339,32 @@ int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite, b
 
         while (remaining > 0) {
             const size_t want = (remaining > BUF) ? BUF : static_cast<size_t>(remaining);
+            fd_set rfds;
+            FD_ZERO(&rfds);
+            FD_SET(clientSock, &rfds);
+            timeval tv{};
+            tv.tv_sec = idleTimeoutMs / 1000;
+            tv.tv_usec = (idleTimeoutMs % 1000) * 1000;
+            int sel = select(static_cast<int>(clientSock + 1), &rfds, nullptr, nullptr, &tv);
+            if (sel == 0) {
+                failReason = "idle timeout";
+                failed = true;
+                ui.progress_end(true);
+                ui.log(svanipp::console::Style::Fail, "Idle timeout while receiving: " + relPath);
+                break;
+            }
+            if (sel < 0) {
+                failReason = "recv failed";
+                failed = true;
+                ui.progress_end(true);
+                ui.log(svanipp::console::Style::Fail, "Receive failed: " + relPath);
+                break;
+            }
             int r = ::recv(clientSock, buf.data(), static_cast<int>(want), 0);
             if (r <= 0) {
+                int err = last_socket_error();
+                failReason = is_timeout_error(err) ? "idle timeout" : "connection lost";
+                failed = true;
                 ui.progress_end(true);
                 ui.log(svanipp::console::Style::Fail, "Connection lost while receiving: " + relPath);
                 break;
@@ -289,27 +387,30 @@ int svanipp::run_receiver(uint16_t port, const string& outDir, bool overwrite, b
             }
         }
         ui.progress_end(true);
+        out.flush();
 
         uint8_t gotDigest[32];
         bool success = false;
-        if (received == fileSize) {
-            if (!recvExact(clientSock, gotDigest, sizeof(gotDigest))) {
-                ui.log(svanipp::console::Style::Fail, "Failed to read SHA-256 digest: " + relPath);
-                closesocket(clientSock);
-                failedFiles++;
-                continue;
+        if (!failed && received == fileSize) {
+            if (!recv_exact_with_timeout(clientSock, gotDigest, sizeof(gotDigest), ioTimeoutMs, recvReason)) {
+                ui.log(svanipp::console::Style::Fail, "Digest " + recvReason + ": " + relPath);
+                failed = true;
             }
 
             uint8_t calcDigest[32];
             hasher.final(calcDigest);
 
-            if (memcmp(gotDigest, calcDigest, 32) != 0) {
+            if (!failed && memcmp(gotDigest, calcDigest, 32) != 0) {
                 ui.log(svanipp::console::Style::Fail, "SHA-256 mismatch: " + relPath);
-                closesocket(clientSock);
-                failedFiles++;
-                continue;
+                failed = true;
             }
-            success = true;
+            if (!failed) success = true;
+        }
+
+        if (!success) {
+            out.close();
+            error_code rmEc;
+            fs::remove(saveAs, rmEc);
         }
 
         if (success) {

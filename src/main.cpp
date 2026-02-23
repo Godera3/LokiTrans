@@ -22,11 +22,17 @@ static void usage() {
     cout <<
         "svanipp v1.0.0\n"
         "Usage:\n"
-        "  svanipp receive --port <p> --out <dir> [--overwrite] [--summary] [--no-color]\n"
+    "  svanipp receive --port <p> --out <dir> [--overwrite] [--summary] [--no-color]\n"
         "    --overwrite: skip confirmation prompt on file collision (default: prompt user)\n"
         "    --summary: print cumulative totals after each file\n"
         "    --no-color: disable ANSI colors/icons\n"
-        "  svanipp send [--ip <ip> | --name <device>] [--no-color] <file1> [file2 ...]\n"
+    "    --io-timeout <sec>: header/digest timeout (default: 5)\n"
+    "    --idle-timeout <sec>: transfer idle timeout (default: 15)\n"
+    "  svanipp send [--ip <ip> | --name <device>] [--no-color] <file1> [file2 ...]\n"
+    "    --connect-timeout <sec>: connect timeout (default: 3)\n"
+    "    --io-timeout <sec>: header/digest timeout (default: 5)\n"
+    "    --idle-timeout <sec>: transfer idle timeout (default: 15)\n"
+    "    --retries <n>: retry count for transient failures (default: 3)\n"
         "    without --ip/--name: interactive device selection\n"
         "  svanipp discover [--no-color]\n";
 }
@@ -53,6 +59,8 @@ int main(int argc, char** argv) {
         bool overwrite = false;
         bool summary = false;
         bool noColor = false;
+        int ioTimeoutSec = 5;
+        int idleTimeoutSec = 15;
 
         for (int i = 2; i < argc; ++i) {
             if (argEq(argv[i], "--port") && i + 1 < argc) {
@@ -65,6 +73,10 @@ int main(int argc, char** argv) {
                 summary = true;
             } else if (argEq(argv[i], "--no-color")) {
                 noColor = true;
+            } else if (argEq(argv[i], "--io-timeout") && i + 1 < argc) {
+                ioTimeoutSec = stoi(argv[++i]);
+            } else if (argEq(argv[i], "--idle-timeout") && i + 1 < argc) {
+                idleTimeoutSec = stoi(argv[++i]);
             } else {
                 usage();
                 return 1;
@@ -81,7 +93,7 @@ int main(int argc, char** argv) {
         }).detach();
 
 
-        return svanipp::run_receiver(port, outDir, overwrite, summary);
+        return svanipp::run_receiver(port, outDir, overwrite, summary, ioTimeoutSec, idleTimeoutSec);
     }
 
     // ===== SEND =====
@@ -91,6 +103,10 @@ int main(int argc, char** argv) {
         uint16_t port = 39000;
         vector<string> files;
         bool noColor = false;
+        int connectTimeoutSec = 3;
+        int ioTimeoutSec = 5;
+        int idleTimeoutSec = 15;
+        int retries = 3;
 
         for (int i = 2; i < argc; ++i) {
             if (argEq(argv[i], "--ip") && i + 1 < argc) {
@@ -101,6 +117,14 @@ int main(int argc, char** argv) {
                 port = static_cast<uint16_t>(stoi(argv[++i]));
             } else if (argEq(argv[i], "--no-color")) {
                 noColor = true;
+            } else if (argEq(argv[i], "--connect-timeout") && i + 1 < argc) {
+                connectTimeoutSec = stoi(argv[++i]);
+            } else if (argEq(argv[i], "--io-timeout") && i + 1 < argc) {
+                ioTimeoutSec = stoi(argv[++i]);
+            } else if (argEq(argv[i], "--idle-timeout") && i + 1 < argc) {
+                idleTimeoutSec = stoi(argv[++i]);
+            } else if (argEq(argv[i], "--retries") && i + 1 < argc) {
+                retries = stoi(argv[++i]);
             } else {
                 files.push_back(argv[i]);
             }
@@ -232,7 +256,16 @@ int main(int argc, char** argv) {
             }
             uint64_t bytesSent = 0;
             string error;
-            int r = svanipp::run_sender(ip, port, f.absPath, f.relPath, bytesSent, error);
+            int r = svanipp::run_sender(ip,
+                                        port,
+                                        f.absPath,
+                                        f.relPath,
+                                        bytesSent,
+                                        error,
+                                        connectTimeoutSec,
+                                        ioTimeoutSec,
+                                        idleTimeoutSec,
+                                        retries);
             if (r == 0) {
                 successFiles++;
                 successBytes += bytesSent;
