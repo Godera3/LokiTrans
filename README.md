@@ -22,11 +22,40 @@ A lightweight, command-line file transfer tool for local networks. Send files an
 - A C++ compiler (GCC/Clang with C++17 support)
 - CMake 3.20 or later
 
+## Fresh Clone on Windows (Recommended)
+
+If you just cloned this repository and do not have build tools installed yet, use the setup scripts.
+
+Open PowerShell in the repository root and run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\quickstart-windows.ps1
+```
+
+What this does:
+- Installs required tools (CMake + MSYS2 via `winget`)
+- Installs GCC/Ninja/CMake toolchain inside MSYS2 UCRT64
+- Builds `build\svanipp.exe` in Release mode
+- Runs `svanipp check`
+
+If you prefer running each step manually:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\setup-windows.ps1
+.\scripts\build-windows.ps1 -BuildType Release
+.\build\svanipp.exe check
+```
+
+Note: the first install may take several minutes.
+
 ### Windows Setup
 
 1. Install MSYS2 (includes GCC compiler)
 2. Install CMake
-3. Open PowerShell and navigate to the Svanipp folder
+3. Install MSYS2 UCRT64 packages: GCC, Ninja, CMake
+4. Open PowerShell and navigate to the Svanipp folder
 
 ### Linux Setup
 
@@ -41,6 +70,12 @@ From the Svanipp directory:
 ```bash
 cmake -S . -B build
 cmake --build build
+```
+
+Windows script equivalent:
+
+```powershell
+.\scripts\build-windows.ps1 -BuildType Release
 ```
 
 On Windows, the executable will be at `build\svanipp.exe`.  

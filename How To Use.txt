@@ -3,6 +3,14 @@ SVANIPP — HOW TO USE
 This guide explains everything you need, from setup to sending your first file.
 No technical knowledge required.
 
+Quick setup if you just cloned this repo on Windows:
+
+PowerShell:
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\quickstart-windows.ps1
+
+This installs dependencies, builds, and runs a readiness check.
+
 ────────────────────────
 PART 1 — WHAT YOU NEED FIRST
 ────────────────────────
@@ -32,6 +40,12 @@ If you only have the source code, build it first.
 
 Open a terminal in the Svanipp folder and run:
 
+Windows (recommended):
+
+.\scripts\build-windows.ps1 -BuildType Release
+
+or manual CMake:
+
 cmake -S . -B build
 cmake --build build
 
@@ -60,7 +74,7 @@ On the computer that will receive the file:
 
 Open PowerShell or Terminal and run:
 
-svanipp receive --port 39000 --out Downloads
+build\svanipp.exe receive --port 39000 --out Downloads
 
 What this means:
 • The computer waits for incoming files
@@ -74,7 +88,7 @@ PART 5 — FIND OTHER DEVICES
 
 On the sending computer, you can see available devices:
 
-svanipp discover
+build\svanipp.exe discover
 
 Example output:
 
