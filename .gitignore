@@ -1,6 +1,12 @@
 # Build outputs
 build/
 
+# IDE user files
+.vs/
+
+# Distribution artifacts
+dist/
+
 # Common CMake generated files (top-level fallback)
 CMakeCache.txt
 CMakeFiles/

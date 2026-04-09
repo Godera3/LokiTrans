@@ -81,6 +81,20 @@ Windows script equivalent:
 On Windows, the executable will be at `build\svanipp.exe`.  
 On Linux, it will be at `build/svanipp`.
 
+## Getting the executable quickly (Windows)
+
+If you only want the runnable `.exe` (no developer tools), there are two simple options:
+
+- Option A — Download a release: visit the repository's GitHub Releases page and download `svanipp-windows.zip` or `svanipp.exe` if present.
+- Option B — Build & package locally (one command):
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\package-windows.ps1 -BuildType Release
+```
+
+This script will build the project (if `build\svanipp.exe` is not already present), copy the executable to `dist\svanipp.exe` and create `dist\svanipp-windows.zip`. Distribute the `dist` folder contents to other users — they can run `svanipp.exe` directly with no build tools required.
+
 ## Usage
 
 ### Start the Receiver
