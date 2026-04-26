@@ -1,4 +1,4 @@
-#include "net/winsock_init.h"
+#include "net/socket_init.h"
 #include "transfer/receiver.h"
 #include "transfer/sender.h"
 #include "discovery/discovery.h"
@@ -110,7 +110,7 @@ static string detect_local_ip() {
     }
 
     sockaddr_in local{};
-    int len = static_cast<int>(sizeof(local));
+    socklen_t len = static_cast<socklen_t>(sizeof(local));
     if (::getsockname(s, reinterpret_cast<sockaddr*>(&local), &len) != 0) {
 #ifdef _WIN32
         closesocket(s);
@@ -192,9 +192,9 @@ static bool bind_test(uint16_t port, string& reason) {
 }
 
 int main(int argc, char** argv) {
-    WinsockInit wsa;
-    if (!wsa.ok()) {
-        cerr << "WSAStartup failed\n";
+    SocketInit sockInit;
+    if (!sockInit.ok()) {
+        cerr << "Socket init failed\n";
         return 1;
     }
 
@@ -248,6 +248,7 @@ int main(int argc, char** argv) {
 
         string devName = "SvanippDevice";
         if (const char* cn = getenv("COMPUTERNAME")) devName = cn;
+        else if (const char* hn = getenv("HOSTNAME")) devName = hn;
 
         thread([port, devName] {
             svanipp::discovery::run_responder(port, devName);

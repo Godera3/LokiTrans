@@ -1,13 +1,21 @@
 #include "transfer/sender.h"
 #include "transfer/protocol.h"
 #include "net/socket_utils.h"
+#include "net/socket_init.h"
 #include "crypto/sha256.h"
 #include "console/console_ui.h"
 #include "console/tui.h"
 
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#else
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#endif
 
 #include <filesystem>
 #include <fstream>
@@ -214,7 +222,7 @@ int svanipp::run_sender(const string& ip,
         svanipp::crypto::Sha256 hasher;
 
         socket_t sock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (sock == INVALID_SOCKET) {
+        if (sock == INVALID_SOCKET_T) {
             ui.log(svanipp::console::Style::Fail, "socket() failed");
             error = "socket failed";
             return 1;
@@ -225,7 +233,7 @@ int svanipp::run_sender(const string& ip,
         addr.sin_port = htons(static_cast<u_short>(port));
         if (inet_pton(AF_INET, ip.c_str(), &addr.sin_addr) != 1) {
             ui.log(svanipp::console::Style::Fail, "Invalid IP: " + ip);
-            closesocket(sock);
+            close_socket(sock);
             error = "invalid ip";
             return 1;
         }
@@ -234,7 +242,7 @@ int svanipp::run_sender(const string& ip,
         if (!connect_with_timeout(sock, addr, connectTimeoutMs, connectReason)) {
             ui.progress_end(true);
             ui.log(svanipp::console::Style::Fail, "Connect failed: " + connectReason);
-            closesocket(sock);
+            close_socket(sock);
             error = connectReason;
             if (attempt + 1 < maxAttempts && is_retryable_error(error)) continue;
             return 1;
@@ -253,7 +261,7 @@ int svanipp::run_sender(const string& ip,
             error = is_timeout_error(err) ? "send timeout" : "send header failed";
             ui.progress_end(true);
             ui.log(svanipp::console::Style::Fail, "Send header failed: " + filename);
-            closesocket(sock);
+            close_socket(sock);
             if (attempt + 1 < maxAttempts && is_retryable_error(error)) continue;
             return 1;
         }
@@ -262,7 +270,7 @@ int svanipp::run_sender(const string& ip,
             error = is_timeout_error(err) ? "send timeout" : "send filename failed";
             ui.progress_end(true);
             ui.log(svanipp::console::Style::Fail, "Send filename failed: " + filename);
-            closesocket(sock);
+            close_socket(sock);
             if (attempt + 1 < maxAttempts && is_retryable_error(error)) continue;
             return 1;
         }
@@ -324,7 +332,7 @@ int svanipp::run_sender(const string& ip,
             if (tui.enabled()) {
                 tui.mark_done_by_path(filename, "FAIL", sent / (1024.0 * 1024.0), fileSizeMb);
             }
-            closesocket(sock);
+            close_socket(sock);
             bytesSent = sent;
             if (attempt + 1 < maxAttempts && is_retryable_error(error)) continue;
             return 1;
@@ -340,7 +348,7 @@ int svanipp::run_sender(const string& ip,
         if (tui.enabled()) {
             tui.mark_done_by_path(filename, "OK", sent / (1024.0 * 1024.0), fileSizeMb);
         }
-        closesocket(sock);
+        close_socket(sock);
         bytesSent = sent;
         return 0;
     }

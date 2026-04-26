@@ -1,13 +1,21 @@
 #include "transfer/receiver.h"
 #include "transfer/protocol.h"
 #include "net/socket_utils.h"
+#include "net/socket_init.h"
 #include "crypto/sha256.h"
 #include "console/console_ui.h"
 #include "console/tui.h"
 
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#else
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#endif
 
 #include <algorithm>
 #include <iomanip>
@@ -162,7 +170,7 @@ int svanipp::run_receiver(uint16_t port,
     fs::create_directories(outPath, ec);
 
     socket_t listenSock = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (listenSock == INVALID_SOCKET) {
+    if (listenSock == INVALID_SOCKET_T) {
         cerr << "socket() failed\n";
         return 1;
     }
@@ -176,15 +184,15 @@ int svanipp::run_receiver(uint16_t port,
     setsockopt(listenSock, SOL_SOCKET, SO_REUSEADDR,
                reinterpret_cast<const char*>(&yes), sizeof(yes));
 
-    if (::bind(listenSock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == SOCKET_ERROR) {
+    if (::bind(listenSock, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) == -1) {
         cerr << "bind() failed\n";
-        closesocket(listenSock);
+        close_socket(listenSock);
         return 1;
     }
 
-    if (::listen(listenSock, 1) == SOCKET_ERROR) {
+    if (::listen(listenSock, 1) == -1) {
         cerr << "listen() failed\n";
-        closesocket(listenSock);
+        close_socket(listenSock);
         return 1;
     }
 
@@ -198,9 +206,9 @@ int svanipp::run_receiver(uint16_t port,
 
     for (;;) {
         sockaddr_in client{};
-        int clientLen = sizeof(client);
+        socklen_t clientLen = sizeof(client);
         socket_t clientSock = ::accept(listenSock, reinterpret_cast<sockaddr*>(&client), &clientLen);
-        if (clientSock == INVALID_SOCKET) {
+        if (clientSock == INVALID_SOCKET_T) {
             ui.log(svanipp::console::Style::Fail, "accept() failed");
             continue;
         }
@@ -211,14 +219,14 @@ int svanipp::run_receiver(uint16_t port,
         string recvReason;
         if (!recv_exact_with_timeout(clientSock, &hf, sizeof(hf), ioTimeoutMs, recvReason)) {
             ui.log(svanipp::console::Style::Fail, "Header " + recvReason);
-            closesocket(clientSock);
+            close_socket(clientSock);
             continue;
         }
 
         // Validate magic
         if (memcmp(hf.magic, svanipp::proto::MAGIC, 8) != 0) {
             ui.log(svanipp::console::Style::Fail, "Bad MAGIC (not a svanipp stream)");
-            closesocket(clientSock);
+            close_socket(clientSock);
             continue;
         }
 
@@ -228,12 +236,12 @@ int svanipp::run_receiver(uint16_t port,
 
         if (version != svanipp::proto::VERSION) {
             ui.log(svanipp::console::Style::Fail, "Unsupported version: " + to_string(version));
-            closesocket(clientSock);
+            close_socket(clientSock);
             continue;
         }
         if (nameLen == 0 || nameLen > 4096) {
             ui.log(svanipp::console::Style::Fail, "Invalid filename length");
-            closesocket(clientSock);
+            close_socket(clientSock);
             continue;
         }
 
@@ -241,7 +249,7 @@ int svanipp::run_receiver(uint16_t port,
         vector<char> nameBuf(nameLen);
         if (!recv_exact_with_timeout(clientSock, nameBuf.data(), nameBuf.size(), ioTimeoutMs, recvReason)) {
             ui.log(svanipp::console::Style::Fail, "Filename " + recvReason);
-            closesocket(clientSock);
+            close_socket(clientSock);
             continue;
         }
         string relPath(nameBuf.begin(), nameBuf.end());
@@ -253,14 +261,14 @@ int svanipp::run_receiver(uint16_t port,
         }
         if (relPath.empty()) {
             ui.log(svanipp::console::Style::Fail, "Rejected unsafe path: " + relPath);
-            closesocket(clientSock);
+            close_socket(clientSock);
             failedFiles++;
             continue;
         }
         // Reject absolute paths, drive letters, and UNC paths
         if (!relPath.empty() && (relPath.front() == '\\' || relPath.front() == '/')) {
             ui.log(svanipp::console::Style::Fail, "Rejected unsafe path: " + relPath);
-            closesocket(clientSock);
+            close_socket(clientSock);
             failedFiles++;
             continue;
         }
@@ -268,7 +276,7 @@ int svanipp::run_receiver(uint16_t port,
                                     (relPath[0] == '\\' && relPath[1] == '\\') ||
                                     (relPath[0] == '/' && relPath[1] == '/'))) {
             ui.log(svanipp::console::Style::Fail, "Rejected unsafe path: " + relPath);
-            closesocket(clientSock);
+            close_socket(clientSock);
             failedFiles++;
             continue;
         }
@@ -287,7 +295,7 @@ int svanipp::run_receiver(uint16_t port,
         }
         if (bad) {
             ui.log(svanipp::console::Style::Fail, "Rejected unsafe path: " + relPath);
-            closesocket(clientSock);
+            close_socket(clientSock);
             failedFiles++;
             continue;
         }
@@ -298,7 +306,7 @@ int svanipp::run_receiver(uint16_t port,
         fs::path saveCanonical = fs::weakly_canonical(saveAs, ec);
         if (ec || !is_subpath(baseCanonical, saveCanonical)) {
             ui.log(svanipp::console::Style::Fail, "Rejected unsafe path: " + relPath);
-            closesocket(clientSock);
+            close_socket(clientSock);
             failedFiles++;
             continue;
         }
@@ -325,7 +333,7 @@ int svanipp::run_receiver(uint16_t port,
         ofstream out(saveAs, ios::binary);
         if (!out) {
             ui.log(svanipp::console::Style::Fail, "Cannot open output file: " + saveAs.string());
-            closesocket(clientSock);
+            close_socket(clientSock);
             failedFiles++;
             continue;
         }
@@ -471,7 +479,7 @@ int svanipp::run_receiver(uint16_t port,
             ui.log(svanipp::console::Style::Info, summaryMsg.str());
         }
 
-        closesocket(clientSock);
+        close_socket(clientSock);
         // loop back and accept next client; listenSock remains open
     }
 

@@ -13,7 +13,7 @@ A lightweight, command-line file transfer tool for local networks. Send files an
 - **Integrity Verification** — SHA-256 hash verification per file ensures no corruption
 - **Clean Progress Output** — Real-time transfer speed and percentage tracking
 - **Persistent Receiver** — Receiver accepts multiple connections sequentially, stays running
-- **Windows-Native** — Built on standard C++17 with Winsock2; Linux/macOS support planned
+- **Windows + Linux** — Built on standard C++17 with Winsock2 on Windows and POSIX sockets on Linux
 - **No Configuration** — Works out of the box on LAN networks
 
 ## Requirements
@@ -263,13 +263,14 @@ Sent: Documents\report.pdf (2.10 MB)
 ## Architecture
 
 ```
-sender.cpp       → Sends files with relative paths over TCP
-receiver.cpp     → Accepts connections, reconstructs folders, verifies hashes
-protocol.h       → Fixed-size header + variable name payload
-socket_utils.cpp → Win32 socket helpers (send/recv with error handling)
-discovery.cpp    → UDP broadcast for device discovery
-crypto/sha256.cpp→ SHA-256 implementation for integrity checking
-main.cpp         → CLI argument parsing and orchestration
+sender.cpp           → Sends files with relative paths over TCP
+receiver.cpp         → Accepts connections, reconstructs folders, verifies hashes
+protocol.h           → Fixed-size header + variable name payload
+socket_init.cpp/h    → Cross-platform socket library initialization
+socket_utils.cpp/h   → Cross-platform socket helpers (send/recv with error handling)
+discovery.cpp        → UDP broadcast for device discovery
+crypto/sha256.cpp    → SHA-256 implementation for integrity checking
+main.cpp             → CLI argument parsing and orchestration
 ```
 
 ## Performance
@@ -289,7 +290,7 @@ Tested on a local Gigabit network:
 - TLS encryption for secure transfers
 - Parallel file transfers (multi-connection)
 - GUI application
-- Linux/macOS native support
+- macOS native support
 - Scheduled/batched operations
 
 ## License
